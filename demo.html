@@ -1,0 +1,1334 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DataVault | Data Management System</title>
+
+<style>
+:root {
+  --primary: #635bff;
+  --dark: #172033;
+  --muted: #778198;
+  --bg: #f5f7fb;
+  --border: #e6eaf1;
+  --white: #ffffff;
+  --green: #159b72;
+  --red: #df4655;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Inter, "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--dark);
+}
+
+button, input, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover {
+  opacity: .88;
+  transform: translateY(-1px);
+}
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 245px;
+  background: #11182a;
+  color: white;
+  padding: 27px 17px;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  font-size: 22px;
+  font-weight: 800;
+  padding: 0 12px 38px;
+}
+
+.logo-icon {
+  width: 39px;
+  height: 39px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: var(--primary);
+  font-size: 22px;
+}
+
+.menu-label {
+  color: #8791a7;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  padding: 0 13px 12px;
+}
+
+.nav-btn {
+  width: 100%;
+  padding: 13px 14px;
+  border: none;
+  background: transparent;
+  color: #aeb8cc;
+  border-radius: 10px;
+  text-align: left;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 7px;
+  font-size: 14px;
+}
+
+.nav-btn.active {
+  background: #29294c;
+  color: white;
+}
+
+.nav-btn.active .nav-icon {
+  color: #a7a2ff;
+}
+
+.nav-icon {
+  font-size: 18px;
+  width: 23px;
+  text-align: center;
+}
+
+.sidebar-bottom {
+  margin-top: auto;
+  padding: 20px 10px 0;
+  color: #8994aa;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+}
+
+.topbar {
+  min-height: 77px;
+  background: white;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 34px;
+  gap: 15px;
+}
+
+.breadcrumb {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.breadcrumb strong {
+  color: var(--dark);
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  font-weight: 650;
+}
+
+.avatar {
+  height: 39px;
+  width: 39px;
+  border-radius: 50%;
+  background: #e9e7ff;
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+}
+
+.content {
+  padding: 32px 34px;
+  max-width: 1500px;
+  margin: auto;
+}
+
+.page {
+  display: none;
+}
+
+.page.active {
+  display: block;
+  animation: fadeIn .22s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.page-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 26px;
+}
+
+.page-heading h1 {
+  font-size: 27px;
+  letter-spacing: -.7px;
+  margin-bottom: 7px;
+}
+
+.page-heading p {
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.btn {
+  border: none;
+  border-radius: 9px;
+  padding: 12px 17px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-light {
+  background: #f0f2f8;
+  color: #39445b;
+}
+
+.btn-danger {
+  background: #fff0f1;
+  color: var(--red);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 19px;
+  margin-bottom: 25px;
+}
+
+.stat-card, .panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 3px 12px rgba(20, 31, 56, .025);
+}
+
+.stat-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 13px;
+  gap: 8px;
+}
+
+.stat-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  font-size: 20px;
+  background: #efedff;
+}
+
+.stat-card h2 {
+  font-size: 29px;
+  margin: 17px 0 8px;
+}
+
+.stat-card small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.stat-card small span {
+  color: var(--green);
+}
+
+.panel {
+  margin-bottom: 24px;
+}
+
+.panel-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.panel-heading h2 {
+  font-size: 16px;
+}
+
+.panel-heading p {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.search {
+  position: relative;
+  flex: 1;
+  min-width: 190px;
+}
+
+.search input {
+  width: 100%;
+  padding: 12px 14px 12px 38px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  background: white;
+}
+
+.search input:focus,
+.form-control:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 91, 255, .1);
+}
+
+.search span {
+  position: absolute;
+  left: 13px;
+  top: 12px;
+  color: var(--muted);
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  white-space: nowrap;
+}
+
+th {
+  background: #f8f9fc;
+  color: #7d879b;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+  font-weight: 700;
+}
+
+th, td {
+  padding: 16px 13px;
+  border-bottom: 1px solid #edf0f5;
+}
+
+td {
+  font-size: 13px;
+}
+
+td strong {
+  font-size: 13px;
+}
+
+.record-id {
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.category {
+  display: inline-block;
+  border-radius: 20px;
+  background: #efedff;
+  color: #6155db;
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.actions {
+  display: flex;
+  gap: 7px;
+}
+
+.action-btn {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: white;
+  padding: 7px 9px;
+  font-size: 12px;
+}
+
+.action-btn.delete {
+  color: var(--red);
+}
+
+.empty {
+  text-align: center;
+  padding: 35px 12px;
+  color: var(--muted);
+}
+
+.activity-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.activity {
+  display: flex;
+  gap: 13px;
+  padding: 15px 0;
+  border-bottom: 1px solid #edf0f5;
+  align-items: flex-start;
+}
+
+.activity:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: #edf9f4;
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+.activity-icon.delete-log {
+  background: #fff0f1;
+  color: var(--red);
+}
+
+.activity-text {
+  flex: 1;
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.activity-text p {
+  color: var(--muted);
+  font-size: 11px;
+  margin-top: 3px;
+}
+
+.activity-type {
+  color: var(--muted);
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 19px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.field.full {
+  grid-column: 1 / -1;
+}
+
+.field label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 13px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  outline: none;
+  background: white;
+}
+
+textarea.form-control {
+  min-height: 110px;
+  resize: vertical;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.note {
+  background: #fff8e7;
+  border: 1px solid #f5e7bc;
+  color: #7d6321;
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 12px;
+  line-height: 1.7;
+  margin-top: 20px;
+}
+
+.toast {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  max-width: calc(100vw - 40px);
+  background: #172033;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px #0002;
+  font-size: 13px;
+  z-index: 10;
+  display: none;
+}
+
+.toast.show {
+  display: block;
+  animation: fadeIn .2s;
+}
+
+.footer {
+  color: #9aa3b4;
+  font-size: 11px;
+  text-align: center;
+  padding: 12px 0 22px;
+}
+
+@media (max-width: 1100px) {
+  .stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    width: 65px;
+    padding: 20px 8px;
+  }
+
+  .logo {
+    padding: 0 5px 30px;
+  }
+
+  .logo-name, .menu-label, .nav-text, .sidebar-bottom {
+    display: none;
+  }
+
+  .nav-btn {
+    justify-content: center;
+    padding: 13px 5px;
+  }
+
+  .nav-icon {
+    width: auto;
+  }
+
+  .topbar {
+    padding: 14px 16px;
+  }
+
+  .content {
+    padding: 23px 14px;
+  }
+
+  .page-heading h1 {
+    font-size: 23px;
+  }
+
+  .stats {
+    gap: 10px;
+  }
+
+  .stat-card, .panel {
+    padding: 15px;
+  }
+
+  .stat-card h2 {
+    font-size: 24px;
+  }
+
+  .stat-top {
+    align-items: flex-start;
+  }
+
+  .stat-icon {
+    width: 33px;
+    height: 33px;
+    font-size: 16px;
+  }
+
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .field.full {
+    grid-column: auto;
+  }
+
+  .activity-type {
+    display: none;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">▦</div>
+      <span class="logo-name">DataVault</span>
+    </div>
+
+    <div class="menu-label">WORKSPACE</div>
+
+    <button class="nav-btn active" data-page="dashboard">
+      <span class="nav-icon">▥</span>
+      <span class="nav-text">Dashboard</span>
+    </button>
+
+    <button class="nav-btn" data-page="records">
+      <span class="nav-icon">▤</span>
+      <span class="nav-text">Data Storage</span>
+    </button>
+
+    <button class="nav-btn" data-page="logs">
+      <span class="nav-icon">◷</span>
+      <span class="nav-text">Activity Logs</span>
+    </button>
+
+    <div class="sidebar-bottom">
+      <strong>DataVault v1.0</strong><br>
+      Personal Data Management
+    </div>
+  </aside>
+
+  <main class="main">
+
+    <header class="topbar">
+      <div class="breadcrumb">
+        Workspace / <strong id="breadcrumb">Dashboard</strong>
+      </div>
+      <div class="profile">
+        <div class="avatar">AD</div>
+        <div>
+          <div>Administrator</div>
+          <div style="color:#8993a7;font-size:11px;margin-top:4px">
+            Personal Workspace
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- PAGE 1: DASHBOARD -->
+      <section class="page active" id="dashboard">
+        <div class="page-heading">
+          <div>
+            <h1>Dashboard Overview</h1>
+            <p>Manage your information from one central workspace.</p>
+          </div>
+          <button class="btn btn-primary" onclick="openPage('records'); resetForm()">
+            + Add New Record
+          </button>
+        </div>
+
+        <div class="stats">
+          <div class="stat-card">
+            <div class="stat-top">
+              Total Records
+              <div class="stat-icon">▤</div>
+            </div>
+            <h2 id="totalRecords">0</h2>
+            <small>All stored records</small>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              Categories
+              <div class="stat-icon" style="background:#e7f8f1">▦</div>
+            </div>
+            <h2 id="totalCategories">0</h2>
+            <small>Unique categories</small>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              Recent Activity
+              <div class="stat-icon" style="background:#fff3e5">◷</div>
+            </div>
+            <h2 id="totalLogs">0</h2>
+            <small>Actions recorded</small>
+          </div>
+
+          <div class="stat-card">
+            <div class="stat-top">
+              Storage Status
+              <div class="stat-icon" style="background:#e7f8f1">✓</div>
+            </div>
+            <h2 style="font-size:23px;color:#159b72">Active</h2>
+            <small>Browser storage enabled</small>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Recent Records</h2>
+              <p>Latest information added to your workspace.</p>
+            </div>
+            <button class="btn btn-light" onclick="openPage('records')">
+              View All →
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Record ID</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="recentTable"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Recent Activity</h2>
+              <p>Track actions performed in this browser.</p>
+            </div>
+            <button class="btn btn-light" onclick="openPage('logs')">
+              All Logs →
+            </button>
+          </div>
+          <div class="activity-list" id="dashboardLogs"></div>
+        </div>
+      </section>
+
+      <!-- PAGE 2: DATA STORAGE -->
+      <section class="page" id="records">
+        <div class="page-heading">
+          <div>
+            <h1>Data Storage</h1>
+            <p>Create, search, update and manage your records.</p>
+          </div>
+          <button class="btn btn-primary" onclick="resetForm(); document.getElementById('recordName').focus()">
+            + New Record
+          </button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2 id="formTitle">Create New Record</h2>
+              <p>Enter the details below to save your information.</p>
+            </div>
+          </div>
+
+          <form id="recordForm">
+            <input type="hidden" id="editId">
+
+            <div class="form-grid">
+              <div class="field">
+                <label for="recordName">Full Name *</label>
+                <input class="form-control" id="recordName"
+                  placeholder="Enter full name" maxlength="100" required>
+              </div>
+
+              <div class="field">
+                <label for="recordCategory">Category *</label>
+                <select class="form-control" id="recordCategory" required>
+                  <option value="">Select category</option>
+                  <option>Personal</option>
+                  <option>Business</option>
+                  <option>Education</option>
+                  <option>Work</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="recordEmail">Email Address</label>
+                <input class="form-control" id="recordEmail"
+                  type="email" placeholder="name@example.com" maxlength="254">
+              </div>
+
+              <div class="field">
+                <label for="recordPhone">Phone Number</label>
+                <input class="form-control" id="recordPhone"
+                  type="tel" placeholder="Enter phone number" maxlength="25">
+              </div>
+
+              <div class="field full">
+                <label for="recordDescription">Description / Notes</label>
+                <textarea class="form-control" id="recordDescription"
+                  placeholder="Add additional information..." maxlength="3000"></textarea>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-light" onclick="resetForm()">
+                Clear Form
+              </button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">
+                Save Record
+              </button>
+            </div>
+          </form>
+
+          <div class="note">
+            <strong>Storage information:</strong> Records are saved in this
+            browser using localStorage. This demo does not send data to a
+            server or Django database.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>All Records</h2>
+              <p>Search and manage your saved information.</p>
+            </div>
+            <button class="btn btn-light" onclick="exportData()">↓ Export JSON</button>
+          </div>
+
+          <div class="toolbar">
+            <div class="search">
+              <span>⌕</span>
+              <input id="recordSearch" placeholder="Search records..."
+                oninput="renderRecords()">
+            </div>
+            <select class="form-control" id="categoryFilter"
+              style="width:auto;min-width:150px" onchange="renderRecords()">
+              <option value="">All Categories</option>
+              <option>Personal</option>
+              <option>Business</option>
+              <option>Education</option>
+              <option>Work</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name / Email</th>
+                  <th>Category</th>
+                  <th>Phone</th>
+                  <th>Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="recordsTable"></tbody>
+            </table>
+          </div>
+          <div id="recordCount" style="font-size:12px;color:#778198;margin-top:15px"></div>
+        </div>
+      </section>
+
+      <!-- ACTIVITY LOGS -->
+      <section class="page" id="logs">
+        <div class="page-heading">
+          <div>
+            <h1>Activity Logs</h1>
+            <p>Review the actions performed in your workspace.</p>
+          </div>
+          <button class="btn btn-danger" onclick="clearLogs()">
+            Clear Logs
+          </button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-heading">
+            <div>
+              <h2>Activity History</h2>
+              <p id="logDescription">Your latest actions appear here.</p>
+            </div>
+          </div>
+          <div class="activity-list" id="allLogs"></div>
+        </div>
+      </section>
+
+      <div class="footer">
+        © <span id="year"></span> DataVault · Personal Data Management System
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+
+// Read saved data. If browser storage is unavailable, show an error.
+function readStorage(key, fallback) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : fallback;
+  } catch (error) {
+    console.error("Storage read failed:", error);
+    alert("Unable to read browser storage. Check browser settings.");
+    return fallback;
+  }
+}
+
+let records = readStorage("datavault_records", []);
+let logs = readStorage("datavault_logs", []);
+let nextId = Number(localStorage.getItem("datavault_next_id")) || 1001;
+
+if (!Array.isArray(records)) records = [];
+if (!Array.isArray(logs)) logs = [];
+
+function saveStorage() {
+  try {
+    localStorage.setItem("datavault_records", JSON.stringify(records));
+    localStorage.setItem("datavault_logs", JSON.stringify(logs));
+    localStorage.setItem("datavault_next_id", String(nextId));
+    return true;
+  } catch (error) {
+    console.error("Storage write failed:", error);
+    showToast("Storage failed. Export your data and check browser storage.");
+    return false;
+  }
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function showToast(message) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 2800);
+}
+
+function formatDate(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "—"
+    : date.toLocaleDateString(undefined, {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+}
+
+function formatDateTime(value) {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime())
+    ? "Unknown time"
+    : date.toLocaleString();
+}
+
+function addLog(action, details, type = "success") {
+  logs.unshift({
+    id: Date.now() + Math.random(),
+    action,
+    details,
+    type,
+    time: new Date().toISOString()
+  });
+
+  // Keep the most recent 200 entries.
+  logs = logs.slice(0, 200);
+}
+
+function openPage(pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.classList.toggle("active", page.id === pageId);
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === pageId);
+  });
+
+  const names = {
+    dashboard: "Dashboard",
+    records: "Data Storage",
+    logs: "Activity Logs"
+  };
+
+  document.getElementById("breadcrumb").textContent =
+    names[pageId] || "Dashboard";
+
+  renderAll();
+}
+
+document.querySelectorAll(".nav-btn").forEach(button => {
+  button.addEventListener("click", () => openPage(button.dataset.page));
+});
+
+function renderStats() {
+  document.getElementById("totalRecords").textContent = records.length;
+
+  document.getElementById("totalCategories").textContent =
+    new Set(records.map(record => record.category)).size;
+
+  document.getElementById("totalLogs").textContent = logs.length;
+}
+
+function renderRecords() {
+  const query = document.getElementById("recordSearch")
+    .value.trim().toLowerCase();
+
+  const category = document.getElementById("categoryFilter").value;
+
+  const filtered = records.filter(record => {
+    const searchable = [
+      record.id, record.name, record.email, record.phone,
+      record.category, record.description
+    ].join(" ").toLowerCase();
+
+    return searchable.includes(query) &&
+      (!category || record.category === category);
+  });
+
+  const table = document.getElementById("recordsTable");
+
+  if (filtered.length === 0) {
+    table.innerHTML = `
+      <tr><td colspan="6" class="empty">
+        No records found. Add a new record to get started.
+      </td></tr>`;
+  } else {
+    table.innerHTML = filtered.map(record => `
+      <tr>
+        <td class="record-id">#${escapeHTML(record.id)}</td>
+        <td>
+          <strong>${escapeHTML(record.name)}</strong><br>
+          <span style="color:#8993a7;font-size:11px">
+            ${escapeHTML(record.email || "No email")}
+          </span>
+        </td>
+        <td><span class="category">${escapeHTML(record.category)}</span></td>
+        <td>${escapeHTML(record.phone || "—")}</td>
+        <td>${escapeHTML(formatDate(record.createdAt))}</td>
+        <td>
+          <div class="actions">
+            <button class="action-btn"
+              onclick="editRecord(${Number(record.id)})">Edit</button>
+            <button class="action-btn delete"
+              onclick="deleteRecord(${Number(record.id)})">Delete</button>
+          </div>
+        </td>
+      </tr>
+    `).join("");
+  }
+
+  document.getElementById("recordCount").textContent =
+    `Showing ${filtered.length} of ${records.length} records`;
+}
+
+function renderRecent() {
+  const recent = records.slice(0, 5);
+  const table = document.getElementById("recentTable");
+
+  if (!recent.length) {
+    table.innerHTML = `
+      <tr><td colspan="5" class="empty">
+        No records yet. Click "Add New Record" to begin.
+      </td></tr>`;
+  } else {
+    table.innerHTML = recent.map(record => `
+      <tr>
+        <td class="record-id">#${escapeHTML(record.id)}</td>
+        <td><strong>${escapeHTML(record.name)}</strong></td>
+        <td><span class="category">${escapeHTML(record.category)}</span></td>
+        <td>${escapeHTML(formatDate(record.createdAt))}</td>
+        <td>
+          <button class="action-btn"
+            onclick="editRecord(${Number(record.id)})">Edit</button>
+        </td>
+      </tr>
+    `).join("");
+  }
+}
+
+function activityHTML(log) {
+  const isDelete = log.type === "delete";
+
+  return `
+    <div class="activity">
+      <div class="activity-icon ${isDelete ? "delete-log" : ""}">
+        ${isDelete ? "×" : "✓"}
+      </div>
+      <div class="activity-text">
+        <strong>${escapeHTML(log.action)}</strong>
+        <div>${escapeHTML(log.details)}</div>
+        <p>${escapeHTML(formatDateTime(log.time))}</p>
+      </div>
+      <span class="activity-type">${isDelete ? "Delete" : "Activity"}</span>
+    </div>`;
+}
+
+function renderLogs() {
+  const dashboardLogs = document.getElementById("dashboardLogs");
+  const allLogs = document.getElementById("allLogs");
+
+  dashboardLogs.innerHTML = logs.length
+    ? logs.slice(0, 4).map(activityHTML).join("")
+    : '<div class="empty">No activity yet.</div>';
+
+  allLogs.innerHTML = logs.length
+    ? logs.map(activityHTML).join("")
+    : '<div class="empty">No activity logs available.</div>';
+
+  document.getElementById("logDescription").textContent =
+    `${logs.length} activity entries recorded (maximum 200).`;
+}
+
+function renderAll() {
+  renderStats();
+  renderRecords();
+  renderRecent();
+  renderLogs();
+}
+
+function resetForm() {
+  document.getElementById("recordForm").reset();
+  document.getElementById("editId").value = "";
+  document.getElementById("formTitle").textContent = "Create New Record";
+  document.getElementById("saveBtn").textContent = "Save Record";
+}
+
+document.getElementById("recordForm").addEventListener("submit", function(event) {
+  event.preventDefault();
+
+  const editId = document.getElementById("editId").value;
+
+  const data = {
+    name: document.getElementById("recordName").value.trim(),
+    category: document.getElementById("recordCategory").value,
+    email: document.getElementById("recordEmail").value.trim(),
+    phone: document.getElementById("recordPhone").value.trim(),
+    description: document.getElementById("recordDescription").value.trim()
+  };
+
+  if (!data.name || !data.category) {
+    showToast("Please enter a name and select a category.");
+    return;
+  }
+
+  if (editId) {
+    const index = records.findIndex(record => record.id === Number(editId));
+
+    if (index === -1) {
+      showToast("Record not found.");
+      resetForm();
+      return;
+    }
+
+    records[index] = {
+      ...records[index],
+      ...data,
+      updatedAt: new Date().toISOString()
+    };
+
+    addLog("Record updated", `${data.name} (#${editId})`);
+    if (!saveStorage()) return;
+
+    showToast("Record updated successfully.");
+  } else {
+    const record = {
+      id: nextId++,
+      ...data,
+      createdAt: new Date().toISOString()
+    };
+
+    records.unshift(record);
+    addLog("Record created", `${data.name} (#${record.id})`);
+
+    if (!saveStorage()) {
+      records.shift();
+      nextId--;
+      return;
+    }
+
+    showToast("Record saved successfully.");
+  }
+
+  resetForm();
+  renderAll();
+});
+
+function editRecord(id) {
+  const record = records.find(item => item.id === id);
+
+  if (!record) {
+    showToast("Record not found.");
+    return;
+  }
+
+  openPage("records");
+
+  document.getElementById("editId").value = record.id;
+  document.getElementById("recordName").value = record.name;
+  document.getElementById("recordCategory").value = record.category;
+  document.getElementById("recordEmail").value = record.email || "";
+  document.getElementById("recordPhone").value = record.phone || "";
+  document.getElementById("recordDescription").value =
+    record.description || "";
+
+  document.getElementById("formTitle").textContent =
+    `Edit Record #${record.id}`;
+
+  document.getElementById("saveBtn").textContent = "Update Record";
+
+  document.getElementById("recordName").focus();
+}
+
+function deleteRecord(id) {
+  const record = records.find(item => item.id === id);
+
+  if (!record) {
+    showToast("Record not found.");
+    return;
+  }
+
+  if (!confirm(`Delete "${record.name}"? This action cannot be undone.`)) {
+    return;
+  }
+
+  const previousRecords = records;
+  const previousLogs = logs;
+
+  records = records.filter(item => item.id !== id);
+  addLog("Record deleted", `${record.name} (#${id})`, "delete");
+
+  if (!saveStorage()) {
+    records = previousRecords;
+    logs = previousLogs;
+    return;
+  }
+
+  if (Number(document.getElementById("editId").value) === id) {
+    resetForm();
+  }
+
+  renderAll();
+  showToast("Record deleted.");
+}
+
+function clearLogs() {
+  if (!logs.length) {
+    showToast("There are no logs to clear.");
+    return;
+  }
+
+  if (!confirm("Clear all activity logs? This cannot be undone.")) {
+    return;
+  }
+
+  const previousLogs = logs;
+  logs = [];
+
+  if (!saveStorage()) {
+    logs = previousLogs;
+    return;
+  }
+
+  renderAll();
+  showToast("Activity logs cleared.");
+}
+
+function exportData() {
+  const backup = {
+    exportedAt: new Date().toISOString(),
+    records,
+    logs
+  };
+
+  const blob = new Blob(
+    [JSON.stringify(backup, null, 2)],
+    { type: "application/json" }
+  );
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = "datavault-backup.json";
+  link.click();
+
+  URL.revokeObjectURL(url);
+  showToast("JSON backup exported.");
+}
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+renderAll();
+</script>
+</body>
+</html>
+```
